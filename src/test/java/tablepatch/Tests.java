@@ -57,6 +57,12 @@ public final class Tests {
                 check(Csv.parse(Csv.format(rows)).equals(rows));
             }
         });
+        test("visual workspace limits do not restrict CLI tables", () -> {
+            StringBuilder csv = new StringBuilder("sku,n\n");
+            for (int i = 0; i < 2001; i++) csv.append(i).append(",value\n");
+            check(table(csv.toString()).rows().size() == 2001);
+            rejects(() -> Web.compare(java.util.Map.of("before", csv.toString(), "after", csv.toString(), "key", "sku")));
+        });
         Path dir = Files.createTempDirectory("tablepatch-test-");
         try {
             Path before = dir.resolve("before.csv"), after = dir.resolve("after.csv"), patch = dir.resolve("patch.csv"), output = dir.resolve("output.csv");

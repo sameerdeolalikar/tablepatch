@@ -1,17 +1,19 @@
 # TablePatch roadmap
 
-The first release candidate is a working exact-text CSV comparator and patcher.
-These are estimated future development hours, not completed work or claimed usage.
+Implemented: local Java-backed visual comparison, highlighted fields, row-level choices,
+search/filtering, pagination, validated CSV/patch exports, and the original CLI.
+
+Remaining work estimates describe development still to do, not completed or paid hours.
 
 | Work | Acceptance criteria | Estimate |
 | --- | --- | --- |
-| Composite keys | Collision-free multi-column identity, clear duplicate diagnostics, compatible patch format evolution | 6–8 hours |
-| Streaming large tables | Bounded-memory external sorting/indexing, temporary-file cleanup, cancellation tests | 10–14 hours |
-| Typed comparison rules | Opt-in decimal/date normalization with explicit locale and unchanged original values | 7–10 hours |
-| Conflict inspection | Report changed-source conflicts by record/field; produce a reviewable resolution workflow | 8–12 hours |
-| Schema changes | Explicit column rename/add/remove plans with validation and reversible examples | 6–9 hours |
-| Packaging and interoperability | Cross-platform tests, shell completion, original CSV fixtures, and release documentation | 4–6 hours |
+| Field-level resolution and undo | Choose individual cells; undo/redo decisions; preserve state across filters; keyboard tests | 8–12 hours |
+| Column mapping and composite keys | Explicit mapping UI, collision-free multi-column keys, duplicate diagnostics, format compatibility | 8–12 hours |
+| Large dataset workflow | Background processing, bounded memory, virtualized grid, cancellation and cleanup tests | 12–18 hours |
+| Saved review sessions | Versioned local session import/export, stale-source detection, recovery after reload | 6–9 hours |
+| Schema and conflict inspection | Explicit column changes and three-way conflicts with reviewable resolution | 8–12 hours |
+| Accessibility and distribution | Screen-reader/keyboard audit, cross-browser checks, responsive refinements, launch packaging | 6–9 hours |
 
-**Estimated remaining work: 41–59 hours.** Development fixtures should use
-fictional inventories or non-personal public catalogues. This is an application
-for table maintenance, not an AI evaluation project.
+**Estimated remaining work: 48–72 hours.** Use fictional inventory/catalogue data.
+The product is a dataset maintenance tool. Assistant comparisons can take place while
+implementing normal features; no model benchmarking infrastructure is part of it.

@@ -28,7 +28,7 @@ public final class Main {
 
     public static int run(String[] args, PrintStream out, PrintStream err) {
         if (args.length == 0 || args[0].equals("--help")) {
-            out.println("TablePatch\ncompare BEFORE.csv AFTER.csv --key COLUMN --output changes.csv\napply BEFORE.csv PATCH.csv --output updated.csv\nOutputs must not already exist. Local filesystem hard-link support is required.");
+            out.println("TablePatch\nserve [PORT]\ncompare BEFORE.csv AFTER.csv --key COLUMN --output changes.csv\napply BEFORE.csv PATCH.csv --output updated.csv\nOutputs must not already exist. Local filesystem hard-link support is required.");
             return 0;
         }
         try {
@@ -57,5 +57,12 @@ public final class Main {
         }
     }
 
-    public static void main(String[] args) { System.exit(run(args, System.out, System.err)); }
+    public static void main(String[] args) {
+        if (args.length > 0 && args[0].equals("serve")) {
+            try { Web.start(args.length == 2 ? Integer.parseInt(args[1]) : 7411); }
+            catch (IOException | IllegalArgumentException error) { System.err.println(error.getMessage()); System.exit(2); }
+            return;
+        }
+        System.exit(run(args, System.out, System.err));
+    }
 }

@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>TablePatch · Review your changes</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <span class="mark" aria-hidden="true">⇄</span>TablePatch
+      </div>
+      <span class="badge">LOCAL DATA WORKSPACE</span>
+    </header>
+    <main>
+      <div class="intro">
+        <div>
+          <p class="eyebrow">Compare · Decide · Export</p>
+          <h1>Every change, in context.</h1>
+          <p class="sub">
+            Review two versions of a table. Keep the changes you want, then
+            export a verified patch and a clean dataset.
+          </p>
+        </div>
+        <button id="demo">Try sample inventory</button>
+      </div>
+      <div id="error" class="status error" role="alert" hidden></div>
+      <div id="status" role="status" class="status" hidden></div>
+      <section class="panel" aria-labelledby="import-title">
+        <div class="panel-title">
+          <h2 id="import-title">01 / Choose your datasets</h2>
+          <span class="muted"
+            >CSV · identical headers · up to 2,000 rows each</span
+          >
+        </div>
+        <div class="grid">
+          <label
+            >Original dataset<input
+              type="file"
+              id="before-file"
+              accept=".csv,text/csv"
+            /><textarea
+              aria-label="Original CSV text"
+              id="before"
+              rows="5"
+              placeholder="sku,name,quantity&#10;A1,Notebook,12"
+              spellcheck="false"
+            ></textarea></label
+          ><label
+            >Incoming dataset<input
+              type="file"
+              id="after-file"
+              accept=".csv,text/csv"
+            /><textarea
+              aria-label="Incoming CSV text"
+              id="after"
+              rows="5"
+              placeholder="sku,name,quantity&#10;A1,Notebook,15"
+              spellcheck="false"
+            ></textarea>
+          </label>
+        </div>
+        <hr class="divider" />
+        <div class="toolbar">
+          <label
+            >Unique key column<input
+              id="key"
+              value="sku"
+              placeholder="e.g. sku" /></label
+          ><button id="compare" class="primary">Compare datasets</button>
+        </div>
+      </section>
+      <div class="stats" id="stats" hidden>
+        <div class="stat">
+          <strong id="count-modified">0</strong><span>Modified records</span>
+        </div>
+        <div class="stat">
+          <strong id="count-added">0</strong><span>Added records</span>
+        </div>
+        <div class="stat">
+          <strong id="count-removed">0</strong><span>Removed records</span>
+        </div>
+        <div class="stat">
+          <strong id="count-unchanged">0</strong><span>Unchanged records</span>
+        </div>
+      </div>
+      <section class="panel" aria-labelledby="review-title">
+        <div class="panel-title">
+          <h2 id="review-title">02 / Review changes</h2>
+          <span class="tag">Row-level decisions</span>
+        </div>
+        <div id="empty" class="empty">
+          <strong>Your comparison starts here.</strong>Choose two CSV files or
+          try the sample inventory.<br />Files stay on this computer.
+        </div>
+        <div id="review" hidden>
+          <div class="toolbar">
+            <label
+              >Search records<input
+                id="search"
+                type="search"
+                placeholder="Search any field…" /></label
+            ><label
+              >Show<select id="filter">
+                <option value="all">All records</option>
+                <option value="changes">Changes only</option>
+                <option value="modified">Modified</option>
+                <option value="added">Added</option>
+                <option value="removed">Removed</option>
+                <option value="unchanged">Unchanged</option>
+              </select></label
+            ><button id="all-incoming">Use all incoming</button
+            ><button id="all-original">Keep all original</button>
+          </div>
+          <div class="scroll">
+            <table>
+              <caption id="result-count"></caption>
+              <thead>
+                <tr>
+                  <th scope="col">Record</th>
+                  <th scope="col">Original</th>
+                  <th scope="col">Incoming</th>
+                  <th scope="col">Use version</th>
+                </tr>
+              </thead>
+              <tbody id="rows"></tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <button id="previous">Previous</button
+            ><span id="page" class="muted"></span
+            ><button id="next">Next</button>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-title">
+          <h2>03 / Export your decisions</h2>
+          <span class="muted" id="decision-count">No comparison yet</span>
+        </div>
+        <p class="notice">
+          Exports follow the incoming row order, with retained original-only
+          records appended. A patch records source and result hashes; the CLI
+          rejects it if the original dataset has changed.
+        </p>
+        <div class="toolbar">
+          <button id="export-csv" class="primary" disabled>
+            Download resolved CSV</button
+          ><button id="export-patch" disabled>Download verified patch</button>
+        </div>
+      </section>
+      <footer>
+        TablePatch · Java comparison engine · No uploads to external
+        services.<br />The visual workspace supports exact text comparison.
+        Large-file workflows remain available through the CLI.
+      </footer>
+    </main>
+  </body>
+</html>

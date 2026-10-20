@@ -2,13 +2,34 @@
 
 **Review a table change. Apply it only to the table you actually reviewed.**
 
-TablePatch is a Java CLI for comparing CSV tables by a unique key and applying
-reviewable, versioned patches. It targets small catalogue and inventory workflows:
+TablePatch is a visual CSV comparison workspace with a Java backend and a companion
+CLI for applying reviewable, versioned patches. It targets small catalogue and inventory workflows:
 inspect added, removed, and changed records without losing quoted fields, leading
 zeros, or row order. The bundled examples use fictional stationery inventory.
 
 This is a new project with an initial in-memory implementation and no external
-Java dependencies. It does not collect data or call network services.
+Java dependencies. The optional UI communicates only with its local Java server; it does not upload
+tables to external services.
+
+## Open the visual workspace
+
+```bash
+sh build.sh test
+java -jar build/tablepatch.jar serve
+```
+
+Open **http://127.0.0.1:7411**. Start with “Try sample inventory,” or import/paste
+original and incoming CSV files. Choose a unique key, review highlighted fields,
+search/filter records, and select the original or incoming version for each row.
+Download a resolved CSV or a patch that can be applied by the existing CLI.
+The server validates each export against the same comparison engine.
+
+The UI uses 50-row pages and supports up to 2,000 rows per table, 1 MB file-picker
+uploads, and a 4 MB encoded request. Decisions remain in memory until the page is
+closed; changing an input invalidates the comparison. It supports row-level choices,
+not arbitrary per-cell edits or three-way merging. Export order follows incoming rows,
+then retained original-only rows. Browser downloads follow browser overwrite behavior;
+the CLI's no-overwrite guarantee applies to CLI file writes.
 
 ## Build and try
 
@@ -64,16 +85,32 @@ and resulting target hash before creating output. A changed source or an incompl
 patch is an error. SHA-256 detects mismatches; it is not a digital signature and
 does not establish the author or trustworthiness of a patch.
 
-No merge conflict resolution, numeric equivalence rules, composite keys, or
-schema migration is implemented yet. Never use private or customer data in issue
+Three-way merge conflict resolution, numeric equivalence rules, composite keys, and
+schema migration remain planned. Never use private or customer data in issue
 reports or examples; this project's fixtures are entirely synthetic.
 
 ## Development
 
 `sh build.sh test` compiles with all compiler warnings treated as errors and runs
-12 dependency-free regression tests. They cover multiline CSV, escaped quotes,
+13 dependency-free regression tests. They cover multiline CSV, escaped quotes,
 duplicate keys, patch conflicts, target ordering, precision preservation, generated
 CSV round trips, and output protection. Initial validation used Temurin 21 on Linux.
 
 See [ROADMAP.md](ROADMAP.md) and [CONTRIBUTING.md](CONTRIBUTING.md). GitHub Actions
 is not configured. Licensed under [MIT](LICENSE).
+
+## Browser verification
+
+With the server running, install Node.js 20+ and run:
+
+```bash
+npm ci
+npx playwright install chromium
+npm run test:ui
+```
+
+The browser test verifies row choices, filtering, exported CSV/patch equivalence
+through the Java CLI, invalid input, request-origin checks, and a 390px layout.
+Set `JAVA_HOME` if Java is not on PATH. Node and Playwright are development tools;
+the application itself needs no JavaScript package installation. See
+[UI.md](UI.md) for architecture and development scenarios.

@@ -12,6 +12,7 @@ else
 fi
 mkdir -p build/classes build/test-classes
 "$javac_cmd" --release 21 -Xlint:all -Werror -d build/classes src/main/java/tablepatch/*.java
+cp -R web build/classes/
 "$jar_cmd" --create --file build/tablepatch.jar --main-class tablepatch.Main -C build/classes .
 if [ "${1:-}" = test ]; then
     "$javac_cmd" --release 21 -Xlint:all -Werror -cp build/classes -d build/test-classes src/test/java/tablepatch/*.java
