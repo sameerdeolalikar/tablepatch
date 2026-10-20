@@ -65,6 +65,12 @@ try {
     });
   }
   await page.setViewportSize({ width: 390, height: 844 });
+  const scrollRegion = page.getByRole("region", { name: "Comparison results" });
+  await scrollRegion.focus();
+  await page.keyboard.press("ArrowRight");
+  await page.waitForFunction(
+    () => document.querySelector(".scroll").scrollLeft > 0,
+  );
   assert(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,

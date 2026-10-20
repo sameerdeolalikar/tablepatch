@@ -380,10 +380,9 @@ caption {
 }
 .ingredient {
   display: grid;
-  grid-template-columns: minmax(100px, 2fr) minmax(65px, 1fr) minmax(
-      65px,
-      1fr
-    ) auto;
+  grid-template-columns:
+    minmax(100px, 2fr) minmax(65px, 1fr) minmax(65px, 1fr)
+    auto;
   gap: 8px;
   margin: 9px 0;
 }
@@ -508,4 +507,16 @@ button.primary:hover:not(:disabled) {
   background: var(--accent);
   color: white;
   filter: brightness(0.92);
+}
+
+#review table {
+  min-width: 680px;
+}
+.scroll-note {
+  display: none;
+}
+@media (max-width: 700px) {
+  .scroll-note {
+    display: block;
+  }
 }
